@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<!-- Build file for hello_world project for Chapter 2 of JBoss Notebook -->
+<project name="Hello World Buildfile" default="main" basedir=".">
+    <!-- Standard Properties -->
+    <property name="top.dir" value="."/>
+    <property name="src.dir" value="${top.dir}/src"/>
+    <property name="lib.dir" value="${top.dir}/src/lib"/>
+    <property name="jboss.dir" value="C:/book/jboss-5.1.0.GA"/>
+    <property name="jboss.deploy.dir" value="${jboss.dir}/server/default/deploy"/>
+
+    <target name="clean">
+        <echo message="In clean"/>
+        <delete file="${top.dir}/quote.war"/>
+    </target>
+
+    <target name="main">
+        <echo message="In main"/>
+        <war warfile="quote.war" webxml="${src.dir}/metadata/web.xml">
+             <webinf dir="${src.dir}/metadata" />
+             <fileset dir="${src.dir}/appfiles"/>
+             <lib dir="${lib.dir}"/>
+        </war>
+        <antcall target="deploy"/>
+    </target>
+
+    <target name="deploy">
+        <echo message="In deploy"/>
+        <copy file="${top.dir}/quote.war" todir="${jboss.deploy.dir}"/>
+    </target>
+
+    <target name="undeploy">
+        <echo message="In undeploy"/>
+        <delete>
+            <fileset id="quote_wars" dir="${jboss.deploy.dir}"
+                includes="*quote*.war"/>
+        </delete>
+    </target>
+
+</project>

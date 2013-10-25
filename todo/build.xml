@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="devnotebook" default="main" basedir=".">
+    <description>JBoss: A Developer's Notebook</description>
+    
+    <property name="src.dir"      location="src" />
+    <property name="gen.src.dir"  location="gensrc" />	
+    <property name="merge.dir"    location="merge" />
+
+    <property name="dd.dir"       location="dd" />
+    <property name="build.dir"    location="build/code" />
+    <property name="buildjar.dir" location="build/jars" />
+
+    <property name="lib.dir"      location="lib" />
+    <property name="web.dir"      location="web" />
+    <property name="xdoclet.lib.dir" location="xdoclet-1.2.2" />
+    
+    <property name="jboss.dir" location="C:/book/jboss-5.1.0.GA" />
+    <property name="jboss.deploy.dir" 
+              location="${jboss.dir}/server/default/deploy"/>
+
+    <property name="optional.dd"  value="default" />
+    
+    <path id="xdoclet.lib.path">
+        <fileset dir="${jboss.dir}/client" includes="*.jar" />
+        <fileset dir="${jboss.dir}/common/lib" includes="*.jar" />
+        <fileset dir="${lib.dir}"          includes="*.jar"/>
+        <fileset dir="${xdoclet.lib.dir}"  includes="*.jar"/>
+    </path>
+    
+    <path id="compile.path">
+        <fileset dir="${lib.dir}" includes="*.jar"/>
+        <fileset dir="${jboss.dir}/client" includes="*.jar" />
+        <fileset dir="${jboss.dir}/common/lib" includes="*.jar" />
+        <fileset dir="${jboss.dir}/server/default/deploy/jbossweb.sar/jsf-libs/" includes="*.jar" />
+    </path>
+    
+    <target name="clean">
+        <delete dir="${gen.src.dir}"  />
+        <delete dir="${dd.dir}"       />
+        <delete dir="${build.dir}"    />
+        <delete dir="${buildjar.dir}" />
+        <delete dir="build"           />
+    </target>
+    
+    <target name="init">
+        <taskdef name="ejbdoclet" 
+                 classname="xdoclet.modules.ejb.EjbDocletTask"
+                 classpathref="xdoclet.lib.path"/>
+        <taskdef name="webdoclet" 
+                 classname="xdoclet.modules.web.WebDocletTask"
+                 classpathref="xdoclet.lib.path"/>
+    </target>
+
+    <target name="main" depends="build"/>
+
+    <target name="build" depends="compile,war,ejbjar,ear">
+
+    </target>
+    
+    <target name="compile" depends="webdoclet,ejbdoclet">
+        <mkdir dir="${build.dir}"/>
+        <javac destdir="${build.dir}" 
+               classpathref="compile.path" 
+               debug="true">
+            <src path="${gen.src.dir};${src.dir}"/>
+        </javac>
+    </target>
+
+    <target name="ejbdoclet" depends="init" unless="skip.xdoclet">
+        <mkdir dir="dd/ejb" />
+
+        <ejbdoclet destdir="${gen.src.dir}" ejbSpec="2.1">
+            <fileset dir="${src.dir}">
+                <include name="**/*Bean.java"/>
+            </fileset>
+            
+            <deploymentdescriptor destdir="dd/ejb"/>
+            
+            <homeinterface/>
+            <remoteinterface/>
+            <localinterface/>
+            <localhomeinterface/>
+            
+            <utilobject includeGUID="true" cacheHomes="true" /> 
+            <valueobject pattern="{0}"/>
+            <entitycmp/>
+            <session/>
+            
+            <!-- <jboss version="4.0" destdir="dd/ejb"/>-->
+        </ejbdoclet>
+    </target>
+    
+    <target name="webdoclet" depends="init" unless="skip.xdoclet">
+        <mkdir dir="dd/web" />
+
+        <webdoclet destdir="${gen.src.dir}" mergedir="${merge.dir}">
+            <fileset dir="${src.dir}">
+                <include name="**/*Servlet.java"/>
+            </fileset>
+            
+            <deploymentdescriptor servletspec="2.4"
+                                  destdir="dd/web" 
+                                  distributable="false"/>
+        </webdoclet>
+    </target>
+
+    <target name="war" depends="war-nodep, compile">
+    </target>
+    
+    <target name="war-nodep">
+        <mkdir dir="${buildjar.dir}"/>
+        
+        <war destfile="${buildjar.dir}/todo.war" 
+             webxml="dd/web/web.xml">
+            <webinf dir="etc/${optional.dd}">
+                <include name="jboss-web.xml" />
+            </webinf>
+            <lib dir="${lib.dir}" />
+            <classes dir="${build.dir}">
+                <include name="**/servlet/**/*.class" />
+            </classes>
+            <fileset dir="${web.dir}"/>
+        </war>
+    </target>
+
+    <target name="ejbjar" depends="compile">
+        <mkdir dir="${buildjar.dir}"/>
+        
+        <jar destfile="${buildjar.dir}/todo.jar" >
+            <metainf dir="dd/ejb">
+                <include name="*.xml" />
+            </metainf>
+            
+            <metainf dir="etc/${optional.dd}">
+                <include name="jboss.xml"/>
+            </metainf> 
+
+            <metainf dir="etc/${optional.dd}">
+                <include name="jbosscmp-jdbc.xml" />
+            </metainf> 
+
+            <fileset dir="${build.dir}">
+                <include name="com/oreilly/jbossnotebook/todo/ejb/**/*.class"/>
+            </fileset>
+        </jar>
+    </target>
+
+
+    <target name="ear-nodep">
+        <mkdir dir="${buildjar.dir}"/>
+        
+        <ear destfile="${buildjar.dir}/todo.ear" 
+             appxml="application.xml">
+            
+            <fileset dir="${buildjar.dir}" includes="*.jar, *.war"/>
+        </ear>
+    </target>
+    
+    <target name="ear" depends="war,ejbjar,ear-nodep">
+    </target>
+
+    <target name="fastwar" depends="war-nodep,ear-nodep,deploy">
+    </target>
+
+    <target name="deploy">
+        <copy file="${buildjar.dir}/todo.ear" 
+              todir="${jboss.deploy.dir}"/>
+    </target>
+
+    <target name="undeploy">
+        <delete file="${jboss.deploy.dir}/todo.ear" />
+    </target>
+
+</project>

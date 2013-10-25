@@ -1,0 +1,6 @@
+<!DOCTYPE jboss PUBLIC
+          "-//JBoss//DTD JBOSS 4.0//EN"
+          "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+<jboss>
+    <security-domain>java:/jaas/todo</security-domain>
+</jboss>

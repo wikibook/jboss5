@@ -1,0 +1,17 @@
+<security-constraint>
+    <web-resource-collection>
+        <web-resource-name>AllFiles</web-resource-name>
+        <url-pattern>/*</url-pattern>
+        <http-method>GET</http-method>
+        <http-method>POST</http-method>
+    </web-resource-collection>
+    <auth-constraint>
+        <role-name>User</role-name>
+    </auth-constraint>
+</security-constraint>
+
+<login-config>
+    <auth-method>BASIC</auth-method>
+    <realm-name>ToDo Application</realm-name>
+</login-config>
+

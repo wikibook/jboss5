@@ -1,0 +1,21 @@
+.tasks,.task {
+    border: thin solid black;
+}
+
+.comments {
+}
+
+.tasksHeader {
+    text-align: center;
+    font-style: italic;
+    color: Snow;
+    background: Teal;
+}
+
+.tasksRow1,.commentsRow1 {
+    background: MediumTurquoise;
+}
+
+.tasksRow2,.commentsRow2 {
+    background: PowderBlue;
+}

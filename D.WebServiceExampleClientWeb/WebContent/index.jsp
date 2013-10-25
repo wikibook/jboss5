@@ -1,0 +1,1 @@
+<jsp:forward page="/addDouble.jsp?first=0&second=0"/>

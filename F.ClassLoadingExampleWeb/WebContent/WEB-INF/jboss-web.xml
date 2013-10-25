@@ -1,0 +1,8 @@
+<jboss-web>
+	<!-- class-loading>
+		<loader-repository>
+			jbossnotebook.com:loader=myLoader
+			<loader-repository-config>java2ParentDelegation=false</loader-repository-config>
+		</loader-repository>
+	</class-loading -->
+</jboss-web>

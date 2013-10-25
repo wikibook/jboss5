@@ -1,0 +1,3 @@
+<security-role>
+    <role-name>User</role-name>
+</security-role>

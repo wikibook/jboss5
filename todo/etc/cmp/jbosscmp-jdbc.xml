@@ -1,0 +1,10 @@
+<!DOCTYPE jbosscmp-jdbc PUBLIC 
+          "-//JBoss//DTD JBOSSCMP-JDBC 4.0//EN"
+          "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_4_0.dtd">
+<jbosscmp-jdbc>
+    <defaults>
+        <create-table>true</create-table>
+        <alter-table>true</alter-table>
+        <remove-table>false</remove-table>
+    </defaults>
+</jbosscmp-jdbc>

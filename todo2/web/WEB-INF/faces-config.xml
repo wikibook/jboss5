@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+
+
+<faces-config>
+    <managed-bean>
+        <description>create</description>
+        <managed-bean-name>createtask</managed-bean-name>
+        <managed-bean-class>com.oreilly.jbossnotebook.todo.servlet.CreateTaskBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <description>Task</description>
+        <managed-bean-name>taskmgr</managed-bean-name>
+        <managed-bean-class>com.oreilly.jbossnotebook.todo.servlet.TaskBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <description>user</description>
+        <managed-bean-name>user</managed-bean-name>
+        <managed-bean-class>com.oreilly.jbossnotebook.todo.servlet.UserBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <description>debug</description>
+        <managed-bean-name>debug</managed-bean-name>
+        <managed-bean-class>com.oreilly.jbossnotebook.todo.servlet.DebugBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <property-name>debugMode</property-name>
+            <value>false</value>
+        </managed-property>
+    </managed-bean>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>front</from-outcome>
+            <to-view-id>/front.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>taskView</from-outcome>
+            <to-view-id>/task.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+
+
+</faces-config>

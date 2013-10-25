@@ -1,0 +1,7 @@
+<ejb-local-ref >
+    <ejb-ref-name>ejb/TaskMasterLocal</ejb-ref-name>
+    <ejb-ref-type>Session</ejb-ref-type>
+    <local-home></local-home>
+    <local></local>
+    <ejb-link>TaskMaster</ejb-link>
+</ejb-local-ref>
